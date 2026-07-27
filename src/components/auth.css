@@ -39,6 +39,13 @@
   font-size: 18px;
 }
 
+.otp-inputs {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+}
+
 /* Not Found Page - 404 Error */
 .notfound-page {
   width: 100%;
