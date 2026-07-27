@@ -7,12 +7,14 @@ import NotFound from "./components/NotFound";
 import OTPVerify from "./components/OTPVerify";
 import UpdatePassword from "./components/UpdatePassword";
 import Profile from "./components/Profile";
+import Home from "./components/Home";
 
 import { Routes, Route } from "react-router-dom";
 
 function App() {
   return (
     <Routes>
+      <Route path="/" element={<Home />} />
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
       <Route path="/password/forgot" element={<ForgotPassword />} />

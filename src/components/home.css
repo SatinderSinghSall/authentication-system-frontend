@@ -1,0 +1,205 @@
+.home-page {
+  width: 100%;
+  min-height: 100vh;
+  background: #f8fafc;
+  color: #1e293b;
+}
+
+/* ---------------- HERO ---------------- */
+
+.hero {
+  max-width: 1200px;
+  margin: auto;
+  padding: 90px 20px 70px;
+  text-align: center;
+}
+
+.hero h1 {
+  font-size: clamp(2.2rem, 5vw, 4rem);
+  font-weight: 700;
+  margin-bottom: 20px;
+  color: #0f172a;
+}
+
+.hero p {
+  max-width: 760px;
+  margin: auto;
+  font-size: 1.1rem;
+  line-height: 1.8;
+  color: #64748b;
+}
+
+.hero-buttons {
+  margin-top: 40px;
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  flex-wrap: wrap;
+}
+
+/* ---------------- SECTIONS ---------------- */
+
+.section {
+  max-width: 1200px;
+  margin: auto;
+  padding: 70px 20px;
+}
+
+.section h2 {
+  text-align: center;
+  font-size: 2rem;
+  color: #0f172a;
+  margin-bottom: 35px;
+}
+
+.section p {
+  text-align: center;
+  max-width: 850px;
+  margin: auto;
+  color: #64748b;
+  line-height: 1.8;
+  font-size: 1rem;
+}
+
+/* ---------------- FEATURES ---------------- */
+
+.features-grid {
+  margin-top: 40px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: 20px;
+}
+
+.features-grid .MuiCard-root {
+  border-radius: 15px;
+  transition: 0.3s;
+  text-align: center;
+  cursor: default;
+  box-shadow: 0 8px 20px rgba(15, 23, 42, 0.08);
+}
+
+.features-grid .MuiCard-root:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 16px 35px rgba(15, 23, 42, 0.15);
+}
+
+.features-grid .MuiCardContent-root {
+  padding: 28px;
+  font-weight: 600;
+}
+
+/* ---------------- TECH STACK ---------------- */
+
+.tech-wrapper {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 30px;
+}
+
+.tech-card {
+  background: white;
+  border-radius: 18px;
+  padding: 30px;
+  box-shadow: 0 10px 25px rgba(15, 23, 42, 0.08);
+}
+
+.tech-card h2 {
+  margin-bottom: 25px;
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+/* ---------------- GALLERY ---------------- */
+
+.gallery {
+  margin-top: 45px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+  gap: 25px;
+}
+
+.gallery img {
+  width: 100%;
+  border-radius: 18px;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
+  transition: 0.35s;
+}
+
+.gallery img:hover {
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 0 20px 45px rgba(15, 23, 42, 0.18);
+}
+
+/* ---------------- FOOTER ---------------- */
+
+footer {
+  margin-top: 80px;
+  padding: 35px 20px;
+  text-align: center;
+  color: #64748b;
+  border-top: 1px solid #e5e7eb;
+  background: white;
+}
+
+/* ---------------- RESPONSIVE ---------------- */
+
+@media (max-width: 992px) {
+  .tech-wrapper {
+    grid-template-columns: 1fr;
+  }
+
+  .gallery {
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  }
+}
+
+@media (max-width: 768px) {
+  .hero {
+    padding: 70px 20px 50px;
+  }
+
+  .hero-buttons {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .hero-buttons button {
+    width: 100%;
+    max-width: 320px;
+  }
+
+  .section {
+    padding: 55px 20px;
+  }
+
+  .section h2 {
+    font-size: 1.8rem;
+  }
+
+  .gallery {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero h1 {
+    font-size: 2rem;
+  }
+
+  .hero p {
+    font-size: 0.95rem;
+  }
+
+  .tech-card {
+    padding: 20px;
+  }
+
+  .features-grid {
+    grid-template-columns: 1fr;
+  }
+}
