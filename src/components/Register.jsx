@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { IoIosLogIn } from "react-icons/io";
 import {
   TextField,
   Button,
@@ -12,7 +11,6 @@ import { Form, Formik } from "formik";
 import {
   ArrowBack,
   Google,
-  Password,
   Visibility,
   VisibilityOff,
 } from "@mui/icons-material";
