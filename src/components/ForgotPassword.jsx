@@ -23,6 +23,8 @@ function ForgotPassword() {
 
   const submitHandler = (values) => {
     console.log(values);
+
+    navigate("/otp/verify");
   };
 
   return (

@@ -35,6 +35,8 @@ function UpdatePassword() {
 
   const submitHandler = (values) => {
     console.log(values);
+
+    navigate("/login");
   };
 
   return (

@@ -31,6 +31,8 @@ function OTPVerify() {
 
   const submitHandler = (values) => {
     console.log(values);
+
+    navigate("/password/update");
   };
 
   const otpArray = ["otp_1", "otp_2", "otp_3", "otp_4", "otp_5", "otp_6"];
