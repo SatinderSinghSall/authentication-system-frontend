@@ -126,3 +126,24 @@
     transform: translateY(0px);
   }
 }
+
+.profile-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.full-name {
+  text-transform: capitalize;
+  font-weight: 700;
+}
+
+.email {
+  color: gray;
+}
+
+.action {
+  margin-top: 1rem;
+}

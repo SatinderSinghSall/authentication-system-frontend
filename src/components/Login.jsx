@@ -34,11 +34,18 @@ const Login = () => {
     email: Yup.string()
       .email("Invalid E-mail entered. Try again with valid e-mail.")
       .required("E-mail is required."),
-    password: Yup.string().required("Password is required."),
+    password: Yup.string()
+      .min(8, "Password must be at least 8 characters.")
+      .matches(/[A-Z]/, "Must contain at least one uppercase letter.")
+      .matches(/[a-z]/, "Must contain at least one lowercase letter.")
+      .matches(/[0-9]/, "Must contain at least one number.")
+      .matches(/[!@#$%^&*]/, "Must contain at least one special character.")
+      .required("Password is required."),
   });
 
   const submitHandler = (values) => {
     console.log(values);
+    navigate("/user/profile");
   };
 
   return (
