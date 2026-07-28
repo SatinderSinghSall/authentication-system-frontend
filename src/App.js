@@ -1,6 +1,9 @@
+import { Routes, Route } from "react-router-dom";
+
 import "./pages/auth.css";
 
 import AppNavbar from "./components/AppNavbar";
+import ScrollToTop from "./components/ScrollToTop";
 import ScrollTopButton from "./components/ScrollTopButton";
 
 import Login from "./pages/Login";
@@ -11,10 +14,6 @@ import OTPVerify from "./pages/OTPVerify";
 import UpdatePassword from "./pages/UpdatePassword";
 import Profile from "./pages/Profile";
 import Home from "./pages/Home";
-
-import { Routes, Route } from "react-router-dom";
-import Footer from "./components/Footer";
-import ScrollToTop from "./components/ScrollToTop";
 
 function App() {
   return (
