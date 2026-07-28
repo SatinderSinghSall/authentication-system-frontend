@@ -84,7 +84,13 @@ const Home = () => {
             Register
           </Button>
 
-          <Button variant="text" startIcon={<GitHub />}>
+          <Button
+            variant="text"
+            startIcon={<GitHub />}
+            href="https://github.com/SatinderSinghSall"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
             GitHub
           </Button>
         </div>
