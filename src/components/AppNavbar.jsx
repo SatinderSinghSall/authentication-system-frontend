@@ -29,7 +29,14 @@ function AppNavbar() {
   return (
     <Navbar bg="dark" variant="dark" expand="lg" sticky="top">
       <Container fluid>
-        <Navbar.Brand href="/">🔐 Satinder Authentication System</Navbar.Brand>
+        <Navbar.Brand href="/">
+          🔐 {/* Small screens */}
+          <span className="d-inline d-lg-none">Authentication System</span>
+          {/* Large screens */}
+          <span className="d-none d-lg-inline">
+            Satinder Authentication System
+          </span>
+        </Navbar.Brand>
 
         <Navbar.Toggle aria-controls="offcanvasNavbar" />
 
