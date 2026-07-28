@@ -48,6 +48,10 @@ const Login = () => {
     navigate("/user/profile");
   };
 
+  const loginWithGoogle = () => {
+    window.location.href = "http://localhost:5000/auth/google";
+  };
+
   return (
     <div className="auth-card">
       <Formik
@@ -119,7 +123,12 @@ const Login = () => {
                 </div>
 
                 <div className="cols-12">
-                  <Button variant="outlined" fullWidth endIcon={<Google />}>
+                  <Button
+                    onClick={loginWithGoogle}
+                    variant="outlined"
+                    fullWidth
+                    endIcon={<Google />}
+                  >
                     Continue with Google
                   </Button>
                 </div>
