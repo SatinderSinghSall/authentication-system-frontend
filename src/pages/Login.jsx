@@ -17,6 +17,8 @@ import {
 } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 
+import API_URL from "../config/api";
+
 const Login = () => {
   const [visible, setVisible] = useState(false);
   const navigate = useNavigate();
@@ -49,7 +51,7 @@ const Login = () => {
   };
 
   const loginWithGoogle = () => {
-    window.location.href = "http://localhost:5000/auth/google";
+    window.location.href = `${API_URL}/auth/google`;
   };
 
   return (

@@ -15,6 +15,11 @@ import UpdatePassword from "./pages/UpdatePassword";
 import Profile from "./pages/Profile";
 import Home from "./pages/Home";
 
+// Environment:
+//! Development: npm start
+//! Testing: npm test
+//! Production: npm run build
+
 function App() {
   return (
     <>
