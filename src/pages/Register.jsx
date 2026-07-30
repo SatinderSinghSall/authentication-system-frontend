@@ -17,6 +17,10 @@ import {
 import { IoPersonAddSharp } from "react-icons/io5";
 import { useNavigate } from "react-router-dom";
 
+import apis from "../utils/api";
+import httpAction from "../utils/httpAction";
+import toast from "react-hot-toast";
+
 const Register = () => {
   const [visible, setVisible] = useState(false);
   const navigate = useNavigate();
@@ -45,9 +49,21 @@ const Register = () => {
       .required("Password is required."),
   });
 
-  const submitHandler = (values) => {
-    console.log(values);
-    navigate("/login");
+  const submitHandler = async (values) => {
+    const data = {
+      url: apis().registerUser,
+      method: "POST",
+      body: values,
+    };
+
+    const result = await httpAction(data);
+
+    console.log(result);
+
+    if (result?.status) {
+      navigate("/login");
+      toast.success(result?.message);
+    }
   };
 
   return (
