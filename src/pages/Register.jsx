@@ -5,6 +5,7 @@ import {
   InputAdornment,
   IconButton,
   Divider,
+  CircularProgress,
 } from "@mui/material";
 import * as Yup from "yup";
 import { Form, Formik } from "formik";
@@ -16,13 +17,15 @@ import {
 } from "@mui/icons-material";
 import { IoPersonAddSharp } from "react-icons/io5";
 import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 
 import apis from "../utils/api";
 import httpAction from "../utils/httpAction";
-import toast from "react-hot-toast";
+import ScreenLoader from "../components/ScreenLoader";
 
 const Register = () => {
   const [visible, setVisible] = useState(false);
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const visibleHandler = () => {
@@ -50,129 +53,156 @@ const Register = () => {
   });
 
   const submitHandler = async (values) => {
-    const data = {
-      url: apis().registerUser,
-      method: "POST",
-      body: values,
-    };
+    setLoading(true);
 
-    const result = await httpAction(data);
+    try {
+      const data = {
+        url: apis().registerUser,
+        method: "POST",
+        body: values,
+      };
 
-    console.log(result);
+      const result = await httpAction(data);
 
-    if (result?.status) {
-      navigate("/login");
-      toast.success(result?.message);
+      if (result?.status) {
+        toast.success(result.message);
+        navigate("/login");
+      }
+    } catch (error) {
+      toast.error("Something went wrong");
+      console.error(error);
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <div className="auth-card">
-      <Formik
-        onSubmit={submitHandler}
-        initialValues={initialState}
-        validationSchema={validationSchema}
-      >
-        {({ handleBlur, handleChange, values, touched, errors }) => (
-          <Form>
-            <div className="container-fluid">
-              <div className="row g-3">
-                <div className="col-12 auth-header">
-                  <IoPersonAddSharp />
-                  <p>Register a New Account.</p>
-                  <span>Sign-up to Continue</span>
-                </div>
+    <>
+      <ScreenLoader open={loading} text="Creating your account..." />
 
-                <div className="col-12">
-                  <TextField
-                    name="name"
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    error={touched.name && Boolean(errors.name)}
-                    helperText={touched.name && errors.name}
-                    label="Enter your name"
-                    fullWidth
-                    size="small"
-                  />
-                </div>
+      <div className="auth-card">
+        <Formik
+          onSubmit={submitHandler}
+          initialValues={initialState}
+          validationSchema={validationSchema}
+        >
+          {({ handleBlur, handleChange, values, touched, errors }) => (
+            <Form>
+              <div className="container-fluid">
+                <div className="row g-3">
+                  <div className="col-12 auth-header">
+                    <IoPersonAddSharp />
+                    <p>Register a New Account.</p>
+                    <span>Sign-up to Continue</span>
+                  </div>
 
-                <div className="col-12">
-                  <TextField
-                    name="email"
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    error={touched.email && Boolean(errors.email)}
-                    helperText={touched.email && errors.email}
-                    label="Enter your email"
-                    fullWidth
-                    size="small"
-                  />
-                </div>
+                  <div className="col-12">
+                    <TextField
+                      name="name"
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      error={touched.name && Boolean(errors.name)}
+                      helperText={touched.name && errors.name}
+                      label="Enter your name"
+                      fullWidth
+                      size="small"
+                    />
+                  </div>
 
-                <div className="cols-12">
-                  <TextField
-                    name="password"
-                    value={values.password}
-                    type={visible ? "text" : "password"}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    error={touched.password && Boolean(errors.password)}
-                    helperText={touched.password && errors.password}
-                    label="Enter your password"
-                    fullWidth
-                    size="small"
-                    slotProps={{
-                      input: {
-                        endAdornment: (
-                          <InputAdornment position="end">
-                            <IconButton
-                              edge="end"
-                              onClick={visibleHandler}
-                              onMouseDown={(e) => e.preventDefault()}
-                            >
-                              {visible ? <Visibility /> : <VisibilityOff />}
-                            </IconButton>
-                          </InputAdornment>
-                        ),
-                      },
-                    }}
-                  />
-                </div>
+                  <div className="col-12">
+                    <TextField
+                      name="email"
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      error={touched.email && Boolean(errors.email)}
+                      helperText={touched.email && errors.email}
+                      label="Enter your email"
+                      fullWidth
+                      size="small"
+                    />
+                  </div>
 
-                <div className="cols-12">
-                  <Button variant="contained" fullWidth type="submit">
-                    Create a new account
-                  </Button>
-                </div>
+                  <div className="cols-12">
+                    <TextField
+                      name="password"
+                      value={values.password}
+                      type={visible ? "text" : "password"}
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      error={touched.password && Boolean(errors.password)}
+                      helperText={touched.password && errors.password}
+                      label="Enter your password"
+                      fullWidth
+                      size="small"
+                      slotProps={{
+                        input: {
+                          endAdornment: (
+                            <InputAdornment position="end">
+                              <IconButton
+                                edge="end"
+                                onClick={visibleHandler}
+                                onMouseDown={(e) => e.preventDefault()}
+                              >
+                                {visible ? <Visibility /> : <VisibilityOff />}
+                              </IconButton>
+                            </InputAdornment>
+                          ),
+                        },
+                      }}
+                    />
+                  </div>
 
-                <div className="cols-12">
-                  <Divider>OR</Divider>
-                </div>
+                  <div className="cols-12">
+                    <Button
+                      variant="contained"
+                      fullWidth
+                      type="submit"
+                      disabled={loading}
+                    >
+                      {loading ? (
+                        <>
+                          <CircularProgress
+                            size={20}
+                            color="inherit"
+                            sx={{ mr: 1 }}
+                          />
+                          Creating Account...
+                        </>
+                      ) : (
+                        "Create a new account"
+                      )}
+                    </Button>
+                  </div>
 
-                <div className="cols-12">
-                  <Button variant="outlined" fullWidth endIcon={<Google />}>
-                    Continue with Google
-                  </Button>
-                </div>
+                  <div className="cols-12">
+                    <Divider>OR</Divider>
+                  </div>
 
-                <div className="cols-12">
-                  <Button
-                    variant="outlined"
-                    fullWidth
-                    startIcon={<ArrowBack />}
-                    onClick={() => {
-                      navigate("/login");
-                    }}
-                  >
-                    Login to your Account
-                  </Button>
+                  <div className="cols-12">
+                    <Button variant="outlined" fullWidth endIcon={<Google />}>
+                      Continue with Google
+                    </Button>
+                  </div>
+
+                  <div className="cols-12">
+                    <Button
+                      variant="outlined"
+                      fullWidth
+                      startIcon={<ArrowBack />}
+                      onClick={() => {
+                        navigate("/login");
+                      }}
+                    >
+                      Login to your Account
+                    </Button>
+                  </div>
                 </div>
               </div>
-            </div>
-          </Form>
-        )}
-      </Formik>
-    </div>
+            </Form>
+          )}
+        </Formik>
+      </div>
+    </>
   );
 };
 
