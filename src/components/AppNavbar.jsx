@@ -7,19 +7,20 @@ import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import NavDropdown from "react-bootstrap/NavDropdown";
 import Offcanvas from "react-bootstrap/Offcanvas";
+import Modal from "react-bootstrap/Modal";
 
 function AppNavbar() {
   const [search, setSearch] = useState("");
+  const [showModal, setShowModal] = useState(false);
 
   const handleSearch = (e) => {
     e.preventDefault();
 
     if (!search.trim()) {
-      alert("Please enter something to search.");
+      setShowModal(true);
       return;
     }
 
-    // Opens a Google search in a new tab
     window.open(
       `https://www.google.com/search?q=${encodeURIComponent(search)}`,
       "_blank",
@@ -79,12 +80,26 @@ function AppNavbar() {
                 onChange={(e) => setSearch(e.target.value)}
               />
 
-              <Button type="submit" variant="outline-light">
+              <Button type="submit" variant="outline-primary">
                 Search
               </Button>
             </Form>
           </Offcanvas.Body>
         </Navbar.Offcanvas>
+
+        <Modal show={showModal} onHide={() => setShowModal(false)} centered>
+          <Modal.Header closeButton>
+            <Modal.Title>Search Required</Modal.Title>
+          </Modal.Header>
+
+          <Modal.Body>Please enter something to search.</Modal.Body>
+
+          <Modal.Footer>
+            <Button variant="secondary" onClick={() => setShowModal(false)}>
+              Close
+            </Button>
+          </Modal.Footer>
+        </Modal>
       </Container>
     </Navbar>
   );
