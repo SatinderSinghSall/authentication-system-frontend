@@ -123,7 +123,6 @@ const Login = () => {
                       onChange={handleChange}
                       onBlur={handleBlur}
                       disabled={loading}
-                      value={values.password}
                       error={touched.password && Boolean(errors.password)}
                       helperText={touched.password && errors.password}
                       label="Enter your password"
