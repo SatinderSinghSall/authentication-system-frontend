@@ -69,7 +69,7 @@ const Register = () => {
         navigate("/login");
       }
     } catch (error) {
-      toast.error("Something went wrong");
+      toast.error("Something went wrong.");
       console.error(error);
     } finally {
       setLoading(false);
@@ -98,9 +98,11 @@ const Register = () => {
 
                   <div className="col-12">
                     <TextField
+                      disabled={loading}
                       name="name"
                       onChange={handleChange}
                       onBlur={handleBlur}
+                      value={values.name}
                       error={touched.name && Boolean(errors.name)}
                       helperText={touched.name && errors.name}
                       label="Enter your name"
@@ -111,9 +113,11 @@ const Register = () => {
 
                   <div className="col-12">
                     <TextField
+                      disabled={loading}
                       name="email"
                       onChange={handleChange}
                       onBlur={handleBlur}
+                      value={values.email}
                       error={touched.email && Boolean(errors.email)}
                       helperText={touched.email && errors.email}
                       label="Enter your email"
@@ -124,6 +128,7 @@ const Register = () => {
 
                   <div className="cols-12">
                     <TextField
+                      disabled={loading}
                       name="password"
                       value={values.password}
                       type={visible ? "text" : "password"}
@@ -141,6 +146,7 @@ const Register = () => {
                               <IconButton
                                 edge="end"
                                 onClick={visibleHandler}
+                                disabled={loading}
                                 onMouseDown={(e) => e.preventDefault()}
                               >
                                 {visible ? <Visibility /> : <VisibilityOff />}
@@ -179,7 +185,12 @@ const Register = () => {
                   </div>
 
                   <div className="cols-12">
-                    <Button variant="outlined" fullWidth endIcon={<Google />}>
+                    <Button
+                      variant="outlined"
+                      disabled={loading}
+                      fullWidth
+                      endIcon={<Google />}
+                    >
                       Continue with Google
                     </Button>
                   </div>
@@ -188,6 +199,7 @@ const Register = () => {
                     <Button
                       variant="outlined"
                       fullWidth
+                      disabled={loading}
                       startIcon={<ArrowBack />}
                       onClick={() => {
                         navigate("/login");

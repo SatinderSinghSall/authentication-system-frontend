@@ -6,6 +6,7 @@ import {
   InputAdornment,
   IconButton,
   Divider,
+  CircularProgress,
 } from "@mui/material";
 import * as Yup from "yup";
 import { Form, Formik } from "formik";
@@ -16,10 +17,16 @@ import {
   VisibilityOff,
 } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 
 import API_URL from "../config/api";
 
+import apis from "../utils/api";
+import httpAction from "../utils/httpAction";
+import ScreenLoader from "../components/ScreenLoader";
+
 const Login = () => {
+  const [loading, setLoading] = useState(false);
   const [visible, setVisible] = useState(false);
   const navigate = useNavigate();
 
@@ -45,9 +52,28 @@ const Login = () => {
       .required("Password is required."),
   });
 
-  const submitHandler = (values) => {
-    console.log(values);
-    navigate("/user/profile");
+  const submitHandler = async (values) => {
+    setLoading(true);
+
+    try {
+      const data = {
+        url: apis().loginUser,
+        method: "POST",
+        body: values,
+      };
+
+      const result = await httpAction(data);
+
+      if (result?.status) {
+        toast.success(result.message);
+        navigate("/user/profile");
+      }
+    } catch (error) {
+      toast.error("Something went wrong.");
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const loginWithGoogle = () => {
@@ -55,115 +81,143 @@ const Login = () => {
   };
 
   return (
-    <div className="auth-card">
-      <Formik
-        onSubmit={submitHandler}
-        validationSchema={validationSchema}
-        initialValues={initialState}
-      >
-        {({ handleBlur, handleChange, values, touched, errors }) => (
-          <Form>
-            <div className="container-fluid">
-              <div className="row g-3">
-                <div className="col-12 auth-header">
-                  <IoIosLogIn />
-                  <p>Welcome Back!</p>
-                  <span>Login to Continue</span>
-                </div>
+    <>
+      <ScreenLoader open={loading} text="Logging you in..." />
 
-                <div className="col-12">
-                  <TextField
-                    name="email"
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    error={touched.email && Boolean(errors.email)}
-                    helperText={touched.email && errors.email}
-                    label="Enter your e-mail"
-                    fullWidth
-                    size="small"
-                  />
-                </div>
+      <div className="auth-card">
+        <Formik
+          onSubmit={submitHandler}
+          validationSchema={validationSchema}
+          initialValues={initialState}
+        >
+          {({ handleBlur, handleChange, values, touched, errors }) => (
+            <Form>
+              <div className="container-fluid">
+                <div className="row g-3">
+                  <div className="col-12 auth-header">
+                    <IoIosLogIn />
+                    <p>Welcome Back!</p>
+                    <span>Login to Continue</span>
+                  </div>
 
-                <div className="cols-12">
-                  <TextField
-                    name="password"
-                    value={values.password}
-                    type={visible ? "text" : "password"}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    error={touched.password && Boolean(errors.password)}
-                    helperText={touched.password && errors.password}
-                    label="Enter your password"
-                    fullWidth
-                    size="small"
-                    slotProps={{
-                      input: {
-                        endAdornment: (
-                          <InputAdornment position="end">
-                            <IconButton
-                              edge="end"
-                              onClick={visibleHandler}
-                              onMouseDown={(e) => e.preventDefault()}
-                            >
-                              {visible ? <Visibility /> : <VisibilityOff />}
-                            </IconButton>
-                          </InputAdornment>
-                        ),
-                      },
-                    }}
-                  />
-                </div>
+                  <div className="col-12">
+                    <TextField
+                      name="email"
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      disabled={loading}
+                      value={values.email}
+                      error={touched.email && Boolean(errors.email)}
+                      helperText={touched.email && errors.email}
+                      label="Enter your e-mail"
+                      fullWidth
+                      size="small"
+                    />
+                  </div>
 
-                <div className="cols-12">
-                  <Button variant="contained" fullWidth type="submit">
-                    Login
-                  </Button>
-                </div>
+                  <div className="cols-12">
+                    <TextField
+                      name="password"
+                      value={values.password}
+                      type={visible ? "text" : "password"}
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      disabled={loading}
+                      value={values.password}
+                      error={touched.password && Boolean(errors.password)}
+                      helperText={touched.password && errors.password}
+                      label="Enter your password"
+                      fullWidth
+                      size="small"
+                      slotProps={{
+                        input: {
+                          endAdornment: (
+                            <InputAdornment position="end">
+                              <IconButton
+                                edge="end"
+                                disabled={loading}
+                                onClick={visibleHandler}
+                                onMouseDown={(e) => e.preventDefault()}
+                              >
+                                {visible ? <Visibility /> : <VisibilityOff />}
+                              </IconButton>
+                            </InputAdornment>
+                          ),
+                        },
+                      }}
+                    />
+                  </div>
 
-                <div className="cols-12">
-                  <Divider>OR</Divider>
-                </div>
+                  <div className="cols-12">
+                    <Button
+                      variant="contained"
+                      fullWidth
+                      type="submit"
+                      disabled={loading}
+                    >
+                      {loading ? (
+                        <>
+                          <CircularProgress
+                            size={20}
+                            color="inherit"
+                            sx={{ mr: 1 }}
+                          />
+                          Logging In...
+                        </>
+                      ) : (
+                        "Login"
+                      )}
+                    </Button>
+                  </div>
 
-                <div className="cols-12">
-                  <Button
-                    onClick={loginWithGoogle}
-                    variant="outlined"
-                    fullWidth
-                    endIcon={<Google />}
-                  >
-                    Continue with Google
-                  </Button>
-                </div>
+                  <div className="cols-12">
+                    <Divider>OR</Divider>
+                  </div>
 
-                <div className="cols-12">
-                  <Button
-                    variant="outlined"
-                    fullWidth
-                    startIcon={<ArrowBack />}
-                    onClick={() => {
-                      navigate("/register");
-                    }}
-                  >
-                    Create new Account
-                  </Button>
-                </div>
+                  <div className="cols-12">
+                    <Button
+                      onClick={loginWithGoogle}
+                      variant="outlined"
+                      fullWidth
+                      disabled={loading}
+                      endIcon={<Google />}
+                    >
+                      Continue with Google
+                    </Button>
+                  </div>
 
-                <div>
-                  <Button
-                    variant="text"
-                    color="error"
-                    fullWidth
-                    onClick={() => navigate("/password/forgot")}
-                  >
-                    Forgot Password?
-                  </Button>
+                  <div className="cols-12">
+                    <Button
+                      variant="outlined"
+                      fullWidth
+                      disabled={loading}
+                      startIcon={<ArrowBack />}
+                      onClick={() => {
+                        navigate("/register");
+                      }}
+                    >
+                      Create new Account
+                    </Button>
+                  </div>
+
+                  <div>
+                    <Button
+                      variant="text"
+                      color="error"
+                      disabled={loading}
+                      fullWidth
+                      onClick={() => navigate("/password/forgot")}
+                    >
+                      Forgot Password?
+                    </Button>
+                  </div>
                 </div>
               </div>
-            </div>
-          </Form>
-        )}
-      </Formik>
-    </div>
+            </Form>
+          )}
+        </Formik>
+      </div>
+    </>
   );
 };
 
