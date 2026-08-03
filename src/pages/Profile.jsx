@@ -8,7 +8,7 @@ import {
   DialogContentText,
   DialogTitle,
 } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import ScreenLoader from "../components/ScreenLoader";
@@ -25,7 +25,7 @@ const Profile = () => {
   const openDialog = () => setOpen(true);
   const closeDialog = () => setOpen(false);
 
-  const getProfile = async () => {
+  const getProfile = useCallback(async () => {
     try {
       const result = await httpAction({
         url: apis().profileUser,
@@ -40,11 +40,11 @@ const Profile = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [navigate]);
 
   useEffect(() => {
     getProfile();
-  }, []);
+  }, [getProfile]);
 
   const handleLogout = async () => {
     setOpen(false);
