@@ -5,6 +5,7 @@ import "./pages/auth.css";
 import AppNavbar from "./components/AppNavbar";
 import ScrollToTop from "./components/ScrollToTop";
 import ScrollTopButton from "./components/ScrollTopButton";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 import Login from "./pages/Login";
 import Register from "./pages/Register";
@@ -33,7 +34,14 @@ function App() {
         <Route path="/password/forgot" element={<ForgotPassword />} />
         <Route path="/otp/verify" element={<OTPVerify />} />
         <Route path="/password/update" element={<UpdatePassword />} />
-        <Route path="/user/profile" element={<Profile />} />
+        <Route
+          path="/user/profile"
+          element={
+            <ProtectedRoute>
+              <Profile />
+            </ProtectedRoute>
+          }
+        />
         <Route path="*" element={<NotFound />} />
       </Routes>
 
