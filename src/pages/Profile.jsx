@@ -1,4 +1,4 @@
-import { Logout } from "@mui/icons-material";
+import { Edit, Logout } from "@mui/icons-material";
 import {
   Avatar,
   Button,
@@ -7,6 +7,7 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
+  TextField,
 } from "@mui/material";
 import React, { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -24,6 +25,21 @@ const Profile = () => {
   const [open, setOpen] = useState(false);
   const openDialog = () => setOpen(true);
   const closeDialog = () => setOpen(false);
+  const [editOpen, setEditOpen] = useState(false);
+
+  const [form, setForm] = useState({
+    name: "",
+    email: "",
+  });
+
+  const openEditDialog = () => {
+    setForm({
+      name: user.name,
+      email: user.email,
+    });
+
+    setEditOpen(true);
+  };
 
   const getProfile = useCallback(async () => {
     try {
@@ -60,6 +76,22 @@ const Profile = () => {
     }
   };
 
+  const handleUpdate = async () => {
+    const result = await httpAction({
+      url: apis().updateProfile,
+      method: "PUT",
+      body: form,
+    });
+
+    if (result?.status) {
+      toast.success(result.message);
+
+      setUser(result.user);
+
+      setEditOpen(false);
+    }
+  };
+
   return (
     <>
       <ScreenLoader open={loading} text="Loading your profile..." />
@@ -86,7 +118,18 @@ const Profile = () => {
           <Button
             fullWidth
             variant="contained"
-            endIcon={<Logout />}
+            startIcon={<Edit />}
+            onClick={openEditDialog}
+            sx={{ mb: 2 }}
+          >
+            Edit Profile
+          </Button>
+
+          <Button
+            fullWidth
+            color="error"
+            variant="outlined"
+            startIcon={<Logout />}
             onClick={openDialog}
           >
             Logout
@@ -106,6 +149,51 @@ const Profile = () => {
 
               <Button color="error" variant="contained" onClick={handleLogout}>
                 Logout
+              </Button>
+            </DialogActions>
+          </Dialog>
+
+          <Dialog
+            open={editOpen}
+            onClose={() => setEditOpen(false)}
+            fullWidth
+            maxWidth="sm"
+          >
+            <DialogTitle>Edit Profile</DialogTitle>
+
+            <DialogContent>
+              <TextField
+                fullWidth
+                margin="dense"
+                label="Name"
+                value={form.name}
+                onChange={(e) =>
+                  setForm({
+                    ...form,
+                    name: e.target.value,
+                  })
+                }
+              />
+
+              <TextField
+                fullWidth
+                margin="dense"
+                label="Email"
+                value={form.email}
+                onChange={(e) =>
+                  setForm({
+                    ...form,
+                    email: e.target.value,
+                  })
+                }
+              />
+            </DialogContent>
+
+            <DialogActions>
+              <Button onClick={() => setEditOpen(false)}>Cancel</Button>
+
+              <Button variant="contained" onClick={handleUpdate}>
+                Save
               </Button>
             </DialogActions>
           </Dialog>
