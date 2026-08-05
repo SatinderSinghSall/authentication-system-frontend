@@ -2,6 +2,7 @@ import { Edit, Logout } from "@mui/icons-material";
 import {
   Avatar,
   Button,
+  CircularProgress,
   Dialog,
   DialogActions,
   DialogContent,
@@ -26,6 +27,7 @@ const Profile = () => {
   const openDialog = () => setOpen(true);
   const closeDialog = () => setOpen(false);
   const [editOpen, setEditOpen] = useState(false);
+  const [updating, setUpdating] = useState(false);
 
   const [form, setForm] = useState({
     name: "",
@@ -77,18 +79,22 @@ const Profile = () => {
   };
 
   const handleUpdate = async () => {
-    const result = await httpAction({
-      url: apis().updateProfile,
-      method: "PUT",
-      body: form,
-    });
+    setUpdating(true);
 
-    if (result?.status) {
-      toast.success(result.message);
+    try {
+      const result = await httpAction({
+        url: apis().updateProfile,
+        method: "PUT",
+        body: form,
+      });
 
-      setUser(result.user);
-
-      setEditOpen(false);
+      if (result?.status) {
+        toast.success(result.message);
+        setUser(result.user);
+        setEditOpen(false);
+      }
+    } finally {
+      setUpdating(false);
     }
   };
 
@@ -155,7 +161,12 @@ const Profile = () => {
 
           <Dialog
             open={editOpen}
-            onClose={() => setEditOpen(false)}
+            disableEscapeKeyDown={updating}
+            onClose={(event, reason) => {
+              if (updating) return;
+              if (reason === "backdropClick") return;
+              setEditOpen(false);
+            }}
             fullWidth
             maxWidth="sm"
           >
@@ -166,6 +177,7 @@ const Profile = () => {
                 fullWidth
                 margin="dense"
                 label="Name"
+                disabled={updating}
                 value={form.name}
                 onChange={(e) =>
                   setForm({
@@ -179,6 +191,7 @@ const Profile = () => {
                 fullWidth
                 margin="dense"
                 label="Email"
+                disabled={updating}
                 value={form.email}
                 onChange={(e) =>
                   setForm({
@@ -190,10 +203,21 @@ const Profile = () => {
             </DialogContent>
 
             <DialogActions>
-              <Button onClick={() => setEditOpen(false)}>Cancel</Button>
+              <Button onClick={() => setEditOpen(false)} disabled={updating}>
+                Cancel
+              </Button>
 
-              <Button variant="contained" onClick={handleUpdate}>
-                Save
+              <Button
+                variant="contained"
+                onClick={handleUpdate}
+                disabled={updating}
+                startIcon={
+                  updating ? (
+                    <CircularProgress size={18} color="inherit" />
+                  ) : null
+                }
+              >
+                {updating ? "Saving..." : "Save"}
               </Button>
             </DialogActions>
           </Dialog>
